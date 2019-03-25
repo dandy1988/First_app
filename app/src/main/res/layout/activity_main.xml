@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:background="@android:color/darker_gray"
             android:hint="@string/name_prioprity"
-            android:paddingLeft="32dp"
+            android:paddingLeft="16dp"
             android:paddingVertical="14dp"
             android:textSize="14sp" />
     </LinearLayout>
