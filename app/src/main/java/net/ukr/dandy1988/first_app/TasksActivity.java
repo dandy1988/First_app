@@ -35,7 +35,7 @@ public class TasksActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
 
         }
-
+//
         @Override
         public int getItemCount() {
             return 0;
