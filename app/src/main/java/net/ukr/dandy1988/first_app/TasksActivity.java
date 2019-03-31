@@ -9,13 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TasksActivity extends AppCompatActivity {
 
-    private RecyclerView rv;
+    private RecyclerView rv ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +25,20 @@ public class TasksActivity extends AppCompatActivity {
 
         rv = findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rv.setAdapter(new TasksAdapter(generatedFakeData()));
+//        rv.setAdapter(new TasksAdapter(generatedFakeData()));
+        TasksAdapter adapter = new TasksAdapter(new TaskClickListener() {
+            @Override public void onClick(Task task) {
+                Toast.makeText(TasksActivity.this, task.getName() + " in progress..", Toast.LENGTH_SHORT).show();
+            }
+        });
+        rv.setAdapter(adapter);
+
+        adapter.seData(generatedFakeData());
     }
 
     public List<Task> generatedFakeData(){
         List<Task> tasks = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             tasks.add( new Task("Task"+i,3));
 
         }
@@ -37,19 +46,28 @@ public class TasksActivity extends AppCompatActivity {
     }
 
     public static class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>{
+        private final List<Task> data = new ArrayList<>();
+        private final TaskClickListener taskClickListener;
 
-        private final List<Task> data;
-
-        public TasksAdapter(List<Task> data){
-            this.data = data;
+        public TasksAdapter(TaskClickListener taskClickListener) {
+            this.taskClickListener = taskClickListener;
         }
+
 
         @NonNull
         @Override
         public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
             LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
             View view = layoutInflater.inflate(R.layout.item_task, viewGroup, false);
-            TaskViewHolder viewHolder = new TaskViewHolder(view);
+            final TaskViewHolder viewHolder = new TaskViewHolder(view);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (RecyclerView.NO_POSITION != viewHolder.getAdapterPosition()) {
+                        taskClickListener.onClick(data.get(viewHolder.getAdapterPosition()));
+                    }
+                }
+            });
             return viewHolder;
         }
 
@@ -63,6 +81,12 @@ public class TasksActivity extends AppCompatActivity {
         public int getItemCount() {
             return data.size();
         }
+
+        public void seData(List<Task> data) {
+            this.data.clear();
+            this.data.addAll(data);
+            notifyDataSetChanged();
+        }
     }
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder{
@@ -71,11 +95,15 @@ public class TasksActivity extends AppCompatActivity {
         public TaskViewHolder(@NonNull View itemView){
             super(itemView);
             tvTaskName = itemView.findViewById(R.id.tvTaskName);
-            tvTaskName.setText("ProgKievUA");
+//            tvTaskName.setText("ProgKievUA");
         }
 
         public void setData(Task task) {
             tvTaskName.setText(task.getName());
         }
+    }
+
+    public interface TaskClickListener{
+        public void onClick(Task task);
     }
 }
