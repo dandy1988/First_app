@@ -1,7 +1,6 @@
 package net.ukr.dandy1988.first_app;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,15 +30,14 @@ public class TasksActivity extends AppCompatActivity {
 
         rv = findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-//        rv.setAdapter(new TasksAdapter(generatedFakeData()));
+
         TasksAdapter adapter = new TasksAdapter(new TaskClickListener() {
             @Override public void onClick(Task task) {
-                String taskText = task.getName() + " in progress..";
+                String taskText = task.getName() + " in progress...";
                 Toast.makeText(TasksActivity.this, taskText, Toast.LENGTH_SHORT).show();
             }
         });
         rv.setAdapter(adapter);
-
         adapter.seData(generatedFakeData());
     }
 
@@ -97,13 +94,13 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 
+    //тут ViewHolder
     public static class TaskViewHolder extends RecyclerView.ViewHolder{
         private TextView tvTaskName;
 
         public TaskViewHolder(@NonNull View itemView){
             super(itemView);
             tvTaskName = itemView.findViewById(R.id.tvTaskName);
-//            tvTaskName.setText("ProgKievUA");
         }
 
         public void setData(Task task) {
@@ -118,6 +115,7 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 
+    //клик на задачу
     public interface TaskClickListener{
         public void onClick(Task task);
     }
