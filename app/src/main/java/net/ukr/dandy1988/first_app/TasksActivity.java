@@ -1,10 +1,17 @@
 package net.ukr.dandy1988.first_app;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +35,8 @@ public class TasksActivity extends AppCompatActivity {
 //        rv.setAdapter(new TasksAdapter(generatedFakeData()));
         TasksAdapter adapter = new TasksAdapter(new TaskClickListener() {
             @Override public void onClick(Task task) {
-                Toast.makeText(TasksActivity.this, task.getName() + " in progress..", Toast.LENGTH_SHORT).show();
+                String taskText = task.getName() + " in progress..";
+                Toast.makeText(TasksActivity.this, taskText, Toast.LENGTH_SHORT).show();
             }
         });
         rv.setAdapter(adapter);
@@ -39,8 +47,8 @@ public class TasksActivity extends AppCompatActivity {
     public List<Task> generatedFakeData(){
         List<Task> tasks = new ArrayList<>();
         for (int i = 0; i < 50; i++) {
-            tasks.add( new Task("Task"+i,3));
-
+            int colorOfTaskPiority = (int) (10*Math.random());
+            tasks.add( new Task("Task #"+i+"  ",3,colorOfTaskPiority));
         }
         return  tasks;
     }
@@ -99,7 +107,14 @@ public class TasksActivity extends AppCompatActivity {
         }
 
         public void setData(Task task) {
-            tvTaskName.setText(task.getName());
+            Spannable text = new SpannableString( "•   "+task.getName());
+            if (task.getColor()>4){
+                text.setSpan(new ForegroundColorSpan(Color.RED), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            }else{
+                text.setSpan(new ForegroundColorSpan(Color.GREEN), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            tvTaskName.setText(text);
         }
     }
 
