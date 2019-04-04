@@ -1,7 +1,10 @@
 package net.ukr.dandy1988.first_app;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,13 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TasksActivity extends AppCompatActivity {
-
+    public static final int ADD_TASK_REQUEST_CODE = 101;
     private RecyclerView rv ;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivityForResult(new Intent(TasksActivity.this, AddTaskActivity.class), ADD_TASK_REQUEST_CODE);
+            }
+        });
 
         rv = findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -39,6 +51,17 @@ public class TasksActivity extends AppCompatActivity {
         });
         rv.setAdapter(adapter);
         adapter.seData(generatedFakeData());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_TASK_REQUEST_CODE && resultCode == RESULT_OK){
+            if (data != null){
+                Task task = ((Task) data.getSerializableExtra(Task.class.getName()));
+                Toast.makeText(this, task.getName(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public List<Task> generatedFakeData(){
