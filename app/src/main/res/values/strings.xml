@@ -2,4 +2,7 @@
     <string name="app_name">First_app</string>
     <string name="name">Название</string>
     <string name="name_prioprity">Приоритет </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

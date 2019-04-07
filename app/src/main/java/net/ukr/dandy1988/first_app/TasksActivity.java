@@ -23,34 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TasksActivity extends AppCompatActivity {
-    public static final int ADD_TASK_REQUEST_CODE = 101;
-    private RecyclerView rv ;
-    private FloatingActionButton fab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks);
 
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               startActivityForResult(new Intent(TasksActivity.this, AddTaskActivity.class), ADD_TASK_REQUEST_CODE);
-            }
-        });
 
-        rv = findViewById(R.id.rv);
-        rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        TasksAdapter adapter = new TasksAdapter(new TaskClickListener() {
-            @Override public void onClick(Task task) {
-                String taskText = task.getName() + " in progress...";
-                Toast.makeText(TasksActivity.this, taskText, Toast.LENGTH_SHORT).show();
-            }
-        });
-        rv.setAdapter(adapter);
-        adapter.seData(generatedFakeData());
     }
 
     @Override
@@ -71,50 +51,6 @@ public class TasksActivity extends AppCompatActivity {
             tasks.add( new Task("Task #"+i+"  ",3,colorOfTaskPiority));
         }
         return  tasks;
-    }
-
-    public static class TasksAdapter extends RecyclerView.Adapter<TaskViewHolder>{
-        private final List<Task> data = new ArrayList<>();
-        private final TaskClickListener taskClickListener;
-
-        public TasksAdapter(TaskClickListener taskClickListener) {
-            this.taskClickListener = taskClickListener;
-        }
-
-
-        @NonNull
-        @Override
-        public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-            LayoutInflater layoutInflater = LayoutInflater.from(viewGroup.getContext());
-            View view = layoutInflater.inflate(R.layout.item_task, viewGroup, false);
-            final TaskViewHolder viewHolder = new TaskViewHolder(view);
-
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    if (RecyclerView.NO_POSITION != viewHolder.getAdapterPosition()) {
-                        taskClickListener.onClick(data.get(viewHolder.getAdapterPosition()));
-                    }
-                }
-            });
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int position) {
-            Task task = data.get(position);
-            taskViewHolder.setData(task);
-        }
-//
-        @Override
-        public int getItemCount() {
-            return data.size();
-        }
-
-        public void seData(List<Task> data) {
-            this.data.clear();
-            this.data.addAll(data);
-            notifyDataSetChanged();
-        }
     }
 
     //тут ViewHolder
