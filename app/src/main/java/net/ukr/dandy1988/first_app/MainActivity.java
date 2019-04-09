@@ -1,5 +1,7 @@
 package net.ukr.dandy1988.first_app;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,6 +13,7 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
